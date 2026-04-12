@@ -1,0 +1,101 @@
+import i18next from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+
+const resources = {
+  en: {
+    translation: {
+      title: "Quiz Grid Optimizer",
+      subtitle: "Build letter grids in the browser with runtime dictionaries and WASM solving.",
+      source: "Dictionary source",
+      n: "Questions (n)",
+      k: "Choices per question (k)",
+      alphabet: "Alphabet override (optional)",
+      fixedSolutionWord: "Fixed solution word (optional)",
+      iterations: "Max iterations",
+      mode: "Search mode",
+      solve: "Download and solve",
+      reset: "Reset",
+      progress: "Progress",
+      statusIdle: "Idle",
+      statusError: "Error",
+      statusDone: "Done",
+      result: "Result",
+      score: "Weighted score",
+      matches: "Matched words",
+      letters: "Letters per position",
+      topWords: "Top matched words",
+      language: "Language",
+      modeLabel: "Mode",
+      snapshotsLabel: "Snapshots",
+      entriesLabel: "Entries",
+      alphabetLabel: "Alphabet",
+      iterationSnapshots: "Iteration snapshots",
+      snapshotsSampled: "Sampled across full run",
+      snapshotsLive: "Live stream",
+      snapshotsRunningHint: "Live snapshots while optimization is running.",
+      noWords: "No words",
+      hitsShort: "hits",
+      snapshotScoreTitle: "Best weighted score in this iteration",
+      snapshotMatchesTitle: "Number of matched words in this iteration",
+      snapshotIterationTitle: "Iteration number",
+      wordScoreTitle: "Weighted contribution score",
+      optionalPlaceholder: "optional, e.g. aeiou",
+      optionalWordPlaceholder: "optional, e.g. maze",
+    },
+  },
+  de: {
+    translation: {
+      title: "Quiz Grid Optimizer",
+      subtitle: "Erzeuge Buchstabenraster im Browser mit Laufzeit-Wortlisten und WASM-Solver.",
+      source: "Wortlistenquelle",
+      n: "Fragen (n)",
+      k: "Antwortoptionen pro Frage (k)",
+      alphabet: "Alphabet-Override (optional)",
+      fixedSolutionWord: "Fixes Loesungswort (optional)",
+      iterations: "Maximale Iterationen",
+      mode: "Suchmodus",
+      solve: "Herunterladen und loesen",
+      reset: "Zuruecksetzen",
+      progress: "Fortschritt",
+      statusIdle: "Bereit",
+      statusError: "Fehler",
+      statusDone: "Fertig",
+      result: "Ergebnis",
+      score: "Gewichtete Punktzahl",
+      matches: "Gefundene Woerter",
+      letters: "Buchstaben pro Position",
+      topWords: "Top gefundene Woerter",
+      language: "Sprache",
+      modeLabel: "Modus",
+      snapshotsLabel: "Snapshots",
+      entriesLabel: "Eintraege",
+      alphabetLabel: "Alphabet",
+      iterationSnapshots: "Iterations-Snapshots",
+      snapshotsSampled: "Stichprobe ueber den gesamten Lauf",
+      snapshotsLive: "Live-Ansicht",
+      snapshotsRunningHint: "Live-Snapshots waehrend der Optimierung.",
+      noWords: "Keine Woerter",
+      hitsShort: "Treffer",
+      snapshotScoreTitle: "Beste gewichtete Punktzahl in dieser Iteration",
+      snapshotMatchesTitle: "Anzahl gefundener Woerter in dieser Iteration",
+      snapshotIterationTitle: "Iterationsnummer",
+      wordScoreTitle: "Gewichteter Beitragswert",
+      optionalPlaceholder: "optional, z. B. aeiou",
+      optionalWordPlaceholder: "optional, z. B. maze",
+    },
+  },
+} as const;
+
+export async function initI18n(): Promise<void> {
+  await i18next.use(LanguageDetector).init({
+    resources,
+    fallbackLng: "en",
+    interpolation: { escapeValue: false },
+    detection: { order: ["querystring", "localStorage", "navigator"] },
+  });
+}
+
+export const t = (key: keyof (typeof resources)["en"]["translation"]): string =>
+  i18next.t(key);
+
+export default i18next;

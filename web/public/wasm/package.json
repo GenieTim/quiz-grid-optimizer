@@ -1,0 +1,15 @@
+{
+  "name": "quiz-grid-optimizer",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "quiz_grid_optimizer_bg.wasm",
+    "quiz_grid_optimizer.js",
+    "quiz_grid_optimizer.d.ts"
+  ],
+  "main": "quiz_grid_optimizer.js",
+  "types": "quiz_grid_optimizer.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

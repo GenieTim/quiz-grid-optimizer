@@ -1,0 +1,16 @@
+# Rust build output
+/target/
+
+# wasm-pack generated files
+/web/public/wasm/*
+!/web/public/wasm/.gitignore
+!/web/public/wasm/README.md
+!/web/public/wasm/package.json
+
+# Local editor and OS noise
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

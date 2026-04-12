@@ -1,0 +1,24 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:wasm": "cd .. && wasm-pack build --target web --out-dir web/public/wasm --out-name quiz_grid_optimizer --no-default-features --features wasm",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.5.2",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.4"
+  },
+  "dependencies": {
+    "7z-wasm": "^1.2.0",
+    "i18next": "^26.0.4",
+    "i18next-browser-languagedetector": "^8.2.1",
+    "papaparse": "^5.5.3",
+    "uikit": "^3.25.15"
+  }
+}
