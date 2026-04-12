@@ -63,23 +63,6 @@ body {
   border-radius: 999px;
 }
 
-.language-row {
-  margin-top: 0.7rem;
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.language-row label {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.language-row .uk-select {
-  width: 140px;
-  border-radius: 0.6rem;
-}
-
 h1,
 h3,
 h4 {
@@ -154,6 +137,55 @@ h4 {
 
 .result-card .muted {
   color: var(--muted);
+}
+
+.app-footer {
+  margin-top: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1rem;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0.35rem;
+}
+
+.footer-links a {
+  color: var(--muted);
+  font-family: 'Chivo Mono', monospace;
+  font-size: 0.79rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(75, 94, 84, 0.5);
+}
+
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  color: var(--accent-strong);
+  border-bottom-color: rgba(15, 90, 69, 0.52);
+}
+
+.footer-language {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.footer-language label {
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer-language .uk-select {
+  width: 110px;
+  min-height: 2rem;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  border-color: rgba(29, 39, 34, 0.22);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .result-meta {
@@ -404,6 +436,11 @@ h4 {
 
   .snapshot-strip {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .app-footer {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

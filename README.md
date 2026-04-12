@@ -1,5 +1,8 @@
 # quiz-grid-optimizer
 
+[![CI](https://github.com/genietim/quiz-grid-optimizer/actions/workflows/ci.yml/badge.svg)](https://github.com/genietim/quiz-grid-optimizer/actions/workflows/ci.yml)
+[![GitHub Pages](https://github.com/genietim/quiz-grid-optimizer/actions/workflows/deploy-pages.yml/badge.svg)](https://genietim.github.io/quiz-grid-optimizer/)
+
 There are quizzes out there, with, say, `n` questions, and to each question you have, say, `k` different answer possibilities, each associated with a letter.
 If you answer the questions correctly, you get a word out from those letters, a solution word.
 This project aims to make a quiz where also incorrect answers lead to a solution word.
@@ -59,19 +62,7 @@ The web app currently includes these source adapters:
 
 No third-party dictionaries are bundled in repository assets; data is fetched at runtime.
 
-## API Notes
-
-- Existing CLI behavior is preserved.
-- Existing wasm request field `dictionary_words` is preserved.
-- New wasm request supports `dictionary_entries: [{ word, weight }]` and optional `mode`.
-- Optional wasm/CLI field `fixed_solution_word` / `--fixed-solution-word` can force one specific solution word pattern into the final grid.
-- Evaluation now exposes both weighted `score` and `match_count`.
-- New wasm function `solve_json_with_snapshots` returns `{ result, snapshots, selected_mode }` for iteration-aware UIs.
-
-Each line in the dictionary file should contain one word. The current solver filters the dictionary to the requested word length and then searches for the best `n x k` letter grid over the provided alphabet.
-
 ## Notes
 
 - `auto` uses exact solving only for very small cases and hill climbing otherwise.
 - The current objective is raw solution-word count.
-- The wasm interface is scaffolded but still intentionally thin.

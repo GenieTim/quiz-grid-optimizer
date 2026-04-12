@@ -6,7 +6,10 @@ import { getSources } from "./sources";
 import type { SolveInput, WorkerMessage } from "./types";
 
 const sources = getSources();
-type WorkerIntermediateMessage = Extract<WorkerMessage, { type: "intermediate" }>;
+type WorkerIntermediateMessage = Extract<
+  WorkerMessage,
+  { type: "intermediate" }
+>;
 type WorkerResultMessage = Extract<WorkerMessage, { type: "result" }>;
 
 const app = document.querySelector<HTMLDivElement>("#app");
@@ -15,7 +18,9 @@ if (!app) {
 }
 const appRoot = app;
 
-const worker = new Worker(new URL("./worker.ts", import.meta.url), { type: "module" });
+const worker = new Worker(new URL("./worker.ts", import.meta.url), {
+  type: "module",
+});
 
 const state = {
   percent: 0,
@@ -33,7 +38,7 @@ function sampleSnapshots(
     best_score: number;
     match_count: number;
     words?: Array<{ word: string; score_weight: number }>;
-  }>
+  }>,
 ): typeof snapshots {
   const maxCards = 10;
   if (snapshots.length <= maxCards) {
@@ -55,14 +60,14 @@ function renderSnapshotCards(
     best_score: number;
     match_count: number;
     words?: Array<{ word: string; score_weight: number }>;
-  }>
+  }>,
 ): string {
   return sampleSnapshots(snapshots)
     .map((snapshot) => {
       const snapshotWords = (snapshot.words ?? [])
         .map(
           (word) =>
-            `<li><span class="snapshot-word-label">${word.word}</span><strong title="${t("wordScoreTitle")}">${word.score_weight}</strong></li>`
+            `<li><span class="snapshot-word-label">${word.word}</span><strong title="${t("wordScoreTitle")}">${word.score_weight}</strong></li>`,
         )
         .join("");
 
@@ -109,12 +114,13 @@ function buildIntermediateHtml(message: WorkerIntermediateMessage): string {
 
 const selectedSourceFromStorage = localStorage.getItem("qaf.source");
 state.selectedSourceId =
-  sources.find((source) => source.id === selectedSourceFromStorage)?.id ?? sources[0]?.id;
+  sources.find((source) => source.id === selectedSourceFromStorage)?.id ??
+  sources[0]?.id;
 
 function buildResultHtml(message: WorkerResultMessage): string {
   const topWordPeak = Math.max(
     1,
-    ...message.result.evaluation.words.map((word) => word.score_weight)
+    ...message.result.evaluation.words.map((word) => word.score_weight),
   );
 
   const topWords = [...message.result.evaluation.words]
@@ -135,7 +141,9 @@ function buildResultHtml(message: WorkerResultMessage): string {
 
   const positions = message.result.assignment.positions
     .map((letters, index) => {
-      const chips = letters.map((letter) => `<span class="letter-chip">${letter}</span>`).join("");
+      const chips = letters
+        .map((letter) => `<span class="letter-chip">${letter}</span>`)
+        .join("");
 
       return `
         <li class="position-card">
@@ -184,14 +192,6 @@ function render(): void {
   appRoot.innerHTML = `
     <main class="page-shell">
       <section class="hero uk-card uk-card-default uk-card-body">
-        <div class="hero-topline">WASM + Dynamic Dictionaries</div>
-        <div class="language-row">
-          <label for="ui-language">${t("language")}</label>
-          <select class="uk-select" id="ui-language">
-            <option value="en" ${i18next.language.startsWith("en") ? "selected" : ""}>English</option>
-            <option value="de" ${i18next.language.startsWith("de") ? "selected" : ""}>Deutsch</option>
-          </select>
-        </div>
         <h1>${t("title")}</h1>
         <p>${t("subtitle")}</p>
       </section>
@@ -206,7 +206,7 @@ function render(): void {
                   ${sources
                     .map(
                       (source) =>
-                        `<option value="${source.id}" ${source.id === state.selectedSourceId ? "selected" : ""}>${source.label}</option>`
+                        `<option value="${source.id}" ${source.id === state.selectedSourceId ? "selected" : ""}>${source.label}</option>`,
                     )
                     .join("")}
                 </select>
@@ -222,27 +222,31 @@ function render(): void {
               </div>
 
               <div class="uk-width-1-1">
-                <label class="uk-form-label">${t("alphabet")}</label>
-                <input class="uk-input" id="alphabet-input" type="text" placeholder="${t("optionalPlaceholder")}" />
-              </div>
-
-              <div class="uk-width-1-1">
                 <label class="uk-form-label">${t("fixedSolutionWord")}</label>
                 <input class="uk-input" id="fixed-solution-word-input" type="text" placeholder="${t("optionalWordPlaceholder")}" />
               </div>
 
-              <div class="uk-width-1-2@s">
-                <label class="uk-form-label">${t("iterations")}</label>
-                <input class="uk-input" id="iterations-input" type="number" min="1" max="2500" value="300" />
-              </div>
-              <div class="uk-width-1-2@s">
-                <label class="uk-form-label">${t("mode")}</label>
-                <select class="uk-select" id="mode-select">
-                  <option value="auto">auto</option>
-                  <option value="hill-climb">hill-climb</option>
-                  <option value="exact">exact</option>
-                </select>
-              </div>
+              <details>
+                <summary class="uk-text-muted">${t("advancedOptions")}</summary>
+
+                <div class="uk-width-1-1">
+                  <label class="uk-form-label">${t("alphabet")}</label>
+                  <input class="uk-input" id="alphabet-input" type="text" placeholder="${t("optionalPlaceholder")}" />
+                </div>
+
+                <div class="uk-width-1-2@s">
+                  <label class="uk-form-label">${t("iterations")}</label>
+                  <input class="uk-input" id="iterations-input" type="number" min="1" max="2500" value="300" />
+                </div>
+                <div class="uk-width-1-2@s">
+                  <label class="uk-form-label">${t("mode")}</label>
+                  <select class="uk-select" id="mode-select">
+                    <option value="auto">auto</option>
+                    <option value="hill-climb">hill-climb</option>
+                    <option value="exact">exact</option>
+                  </select>
+                </div>
+              </details>
 
               <div class="uk-width-1-1 control-row">
                 <button class="uk-button uk-button-primary" id="solve-btn" ${state.isRunning ? "disabled" : ""}>${t("solve")}</button>
@@ -267,6 +271,19 @@ function render(): void {
           ${state.resultData ? buildResultHtml(state.resultData) : `<h3>${t("result")}</h3><p class="muted">${t("statusIdle")}</p>`}
         </div>
       </section>
+
+      <footer class="app-footer" aria-label="${t("footerLabel")}">
+        <div class="footer-links">
+          <a href="https://github.com/GenieTim/quiz-grid-optimizer" target="_blank" rel="noopener noreferrer">${t("githubLinkLabel")}</a>
+        </div>
+        <div class="footer-language">
+          <label for="ui-language">${t("language")}</label>
+          <select class="uk-select" id="ui-language">
+            <option value="en" ${i18next.language.startsWith("en") ? "selected" : ""}>English</option>
+            <option value="de" ${i18next.language.startsWith("de") ? "selected" : ""}>Deutsch</option>
+          </select>
+        </div>
+      </footer>
     </main>
   `;
 
@@ -277,7 +294,8 @@ function render(): void {
 function bindEvents(): void {
   const solveButton = document.querySelector<HTMLButtonElement>("#solve-btn");
   const resetButton = document.querySelector<HTMLButtonElement>("#reset-btn");
-  const sourceSelect = document.querySelector<HTMLSelectElement>("#source-select");
+  const sourceSelect =
+    document.querySelector<HTMLSelectElement>("#source-select");
 
   if (!solveButton || !resetButton || !sourceSelect) {
     return;
@@ -293,17 +311,32 @@ function bindEvents(): void {
       return;
     }
 
-    const n = Number((document.querySelector<HTMLInputElement>("#n-input")?.value ?? "4").trim());
-    const k = Number((document.querySelector<HTMLInputElement>("#k-input")?.value ?? "2").trim());
-    const iterations = Number(
-      (document.querySelector<HTMLInputElement>("#iterations-input")?.value ?? "300").trim()
+    const n = Number(
+      (
+        document.querySelector<HTMLInputElement>("#n-input")?.value ?? "4"
+      ).trim(),
     );
-    const alphabet = (document.querySelector<HTMLInputElement>("#alphabet-input")?.value ?? "").trim();
+    const k = Number(
+      (
+        document.querySelector<HTMLInputElement>("#k-input")?.value ?? "2"
+      ).trim(),
+    );
+    const iterations = Number(
+      (
+        document.querySelector<HTMLInputElement>("#iterations-input")?.value ??
+        "300"
+      ).trim(),
+    );
+    const alphabet = (
+      document.querySelector<HTMLInputElement>("#alphabet-input")?.value ?? ""
+    ).trim();
     const fixedSolutionWord = (
-      document.querySelector<HTMLInputElement>("#fixed-solution-word-input")?.value ?? ""
+      document.querySelector<HTMLInputElement>("#fixed-solution-word-input")
+        ?.value ?? ""
     ).trim();
     const mode =
-      (document.querySelector<HTMLSelectElement>("#mode-select")?.value as SolveInput["mode"]) ?? "auto";
+      (document.querySelector<HTMLSelectElement>("#mode-select")
+        ?.value as SolveInput["mode"]) ?? "auto";
 
     const payload: SolveInput = {
       sourceId: sourceSelect.value,
@@ -339,12 +372,15 @@ function bindEvents(): void {
 }
 
 function syncView(): void {
-  const progressBar = document.querySelector<HTMLProgressElement>("#progress-bar");
+  const progressBar =
+    document.querySelector<HTMLProgressElement>("#progress-bar");
   const statusLine = document.querySelector<HTMLElement>("#status-line");
   const statusDetail = document.querySelector<HTMLElement>("#status-detail");
   const solveButton = document.querySelector<HTMLButtonElement>("#solve-btn");
-  const sourceSelect = document.querySelector<HTMLSelectElement>("#source-select");
-  const languageSelect = document.querySelector<HTMLSelectElement>("#ui-language");
+  const sourceSelect =
+    document.querySelector<HTMLSelectElement>("#source-select");
+  const languageSelect =
+    document.querySelector<HTMLSelectElement>("#ui-language");
 
   if (progressBar) {
     progressBar.value = state.percent;
@@ -376,7 +412,7 @@ function renderResult(): void {
     ? buildResultHtml(state.resultData)
     : state.intermediateData && state.isRunning
       ? buildIntermediateHtml(state.intermediateData)
-    : `<h3>${t("result")}</h3><p class="muted">${t("statusIdle")}</p>`;
+      : `<h3>${t("result")}</h3><p class="muted">${t("statusIdle")}</p>`;
 }
 
 worker.onmessage = (event: MessageEvent<WorkerMessage>) => {
