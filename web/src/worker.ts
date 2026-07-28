@@ -214,8 +214,8 @@ async function getSolver(): Promise<SolverExports> {
     return solverExports;
   }
 
-  const wasmJsUrl = new URL("/wasm/quiz_grid_optimizer.js", self.location.origin).toString();
-  const wasmBgUrl = new URL("/wasm/quiz_grid_optimizer_bg.wasm", self.location.origin).toString();
+  const wasmJsUrl = new URL(/* @vite-ignore */ "../wasm/quiz_grid_optimizer.js", import.meta.url).toString();
+  const wasmBgUrl = new URL(/* @vite-ignore */ "../wasm/quiz_grid_optimizer_bg.wasm", import.meta.url).toString();
   let wasmModule: {
     default: (input?: RequestInfo | URL | Response | BufferSource | WebAssembly.Module) => Promise<unknown>;
     solve_json: (requestJson: string) => string;
